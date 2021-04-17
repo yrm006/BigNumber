@@ -1,4 +1,4 @@
-#define DIGIT 10000 //ŒvZ‚µ‚½‚¢Œ…”
+#define DIGIT 10000 //è¨ˆç®—ã—ãŸã„æ¡æ•°
 #define ARRAYSIZE (DIGIT/4+2)
 // #define ROUND
 class BigNumber

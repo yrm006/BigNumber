@@ -2,7 +2,7 @@
 #include <iostream>
 using namespace std;
 
-#define N 2 //•½•ûª‚ğ‹‚ß‚½‚¢”
+#define N 2 //å¹³æ–¹æ ¹ã‚’æ±‚ã‚ãŸã„æ•°
 
 class BigNumber A(0), B(0), C(0), D(3*N);
 int main()
@@ -21,7 +21,7 @@ int main()
 
     A.prt(1, DIGIT);
 
-// ŒŸZ—p
+// æ¤œç®—ç”¨
 //    cout << endl;
 //    A.mul2(&A, &A);
 //    A.prt(1, DIGIT);

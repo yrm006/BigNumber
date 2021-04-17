@@ -1,5 +1,4 @@
-﻿// BigNumber.cpp
-//
+﻿// 多倍長数演算ライブラリ
 
 #include <iostream>
 #include "BigNumber.h"

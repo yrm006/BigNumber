@@ -1,4 +1,4 @@
-// ƒlƒCƒsƒA”eŒvZ
+// ãƒã‚¤ãƒ”ã‚¢æ•°eè¨ˆç®—
 
 #include "BigNumber.h"
 
