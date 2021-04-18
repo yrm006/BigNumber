@@ -3,7 +3,7 @@
 #include <iostream>
 #include "BigNumber.h"
 using namespace std;
-unsigned int BigNumber::tempvalue[ARRAYSIZE * 2];
+unsigned long long BigNumber::tempvalue[ARRAYSIZE * 2];
 
 BigNumber::BigNumber(unsigned int n) {
 	value[0] = n;
@@ -28,7 +28,7 @@ void BigNumber::setvalue(unsigned int n, unsigned p) {
 		else value[i] = 0;
 	}
 }
-unsigned int BigNumber::retvalue(unsigned int p) {
+unsigned long long BigNumber::retvalue(unsigned int p) {
 	return value[p];
 }
 void BigNumber::as(BigNumber *a) {
@@ -43,8 +43,8 @@ void BigNumber::add(BigNumber *a, BigNumber *b) {
 	int c = 0;
 	for (int i = ARRAYSIZE-1; i >= 0; i--) {
 		value[i] = a->value[i] + b->value[i] + c;
-		if (i>0 && value[i] >= 10000) {
-			value[i] = value[i] - 10000;
+		if (i>0 && value[i] >= 100000000) {
+			value[i] = value[i] - 100000000;
 			c = 1;
 		}
 		else c = 0;
@@ -57,8 +57,8 @@ void BigNumber::sub(BigNumber *a, BigNumber *b) {
 	int c = 0;
 	for (int i = ARRAYSIZE - 1; i >= 0; i--) {
 		value[i] = a->value[i] - b->value[i] - c;
-		if (i > 0 && value[i] >10000000) {
-			value[i] = value[i] + 10000;
+		if (i > 0 && (long long)value[i] <0) {
+			value[i] = value[i] + 100000000;
 			c = 1;
 		}
 		else c = 0;
@@ -68,28 +68,29 @@ void BigNumber::sub(BigNumber *a, BigNumber *b) {
 #endif
 }
 void BigNumber::div(BigNumber *a, unsigned int n) {
-	int r;
-	for (int i = 0; i < ARRAYSIZE; i++) value[i] = a->value[i];
-	for (int i = 0; i < ARRAYSIZE; i++) {
-		if (value[i]) {
-			r = value[i] % n;
-			value[i] /= n;
-			if (i < ARRAYSIZE - 1) value[i + 1] += r * 10000;
+	unsigned long long r;
+	int i;
+	for (i = 0; i < ARRAYSIZE; i++) value[i] = a->value[i];
+	r = value[0];
+	for (i = 0; i < ARRAYSIZE - 1; i++) {
+		if (r) {
+			value[i] = r / n;
+			r = (r % n) * 100000000 + value[i + 1];
 		}
-		else r = 0;
+		else r = value[i + 1];
 	}
-	if (r * 10000 / n > 4999) value[ARRAYSIZE - 1]++;
+	value[i] = r / n;
 #ifdef ROUND
 	round(this);
 #endif
 }
 void BigNumber::mul(BigNumber *a, unsigned int n) {
-	int c = 0;
+	unsigned long long c = 0;
 	for (int i = ARRAYSIZE - 1; i >= 0; i--) {
 		value[i] = a->value[i] * n + c;
-		if (value[i] > 10000) {
-			c = value[i] / 10000;
-			value[i] %= 10000;
+		if (value[i] > 100000000 && i>0) {
+			c = value[i] / 100000000;
+			value[i] %= 100000000;
 		}
 		else c = 0;
 	}
@@ -98,15 +99,15 @@ void BigNumber::mul(BigNumber *a, unsigned int n) {
 #endif
 }
 void BigNumber::mul2(BigNumber *a, BigNumber *b) {
-	unsigned int c,d;
+	unsigned long long c,d;
 	for (int i = 0; i < ARRAYSIZE * 2 - 1; i++) tempvalue[i] = 0;
 	for (int i = ARRAYSIZE - 1; i >= 0; i--) {
 		c = 0;
 		for (int j = ARRAYSIZE - 1; j >= 0; j--) {
 			d = tempvalue[i + j] + a->value[i] * b->value[j] + c;
-			if (d >= 10000) {
-				c = d / 10000;
-				tempvalue[i + j] = d % 10000;
+			if (d >= 100000000) {
+				c = d / 100000000;
+				tempvalue[i + j] = d % 100000000;
 			}
 			else {
 				c = 0;
@@ -114,7 +115,7 @@ void BigNumber::mul2(BigNumber *a, BigNumber *b) {
 			}
 		}
 		if (i > 0) tempvalue[i - 1] += c;
-		else tempvalue[0] += c * 10000;
+		else tempvalue[0] += c * 100000000;
 	}
 	for (int i = 0; i < ARRAYSIZE; i++) value[i] = tempvalue[i];
 #ifdef ROUND
@@ -127,33 +128,45 @@ void BigNumber::prt(int dp, int deg) {
 	else {
 		while (value[i] == 0 && i < dp - 1) i++;
 		cout << value[i++];
-		while (i < dp) prt4(value[i++], 4);
+		while (i < dp) prt8(value[i++], 8);
 	}
 	if (dp > ARRAYSIZE - 2) return;
 	if (deg == 0) return;
 	cout << ".";
 	while (deg >0 && i <= ARRAYSIZE - 2) {
-		prt4(value[i++], deg);
-		deg -= 4;
+		prt8(value[i++], deg);
+		deg -= 8;
 	}
 }
 void round(BigNumber *a) {
 	int i = ARRAYSIZE - 1;
-	if (a->value[i] < 9990) return;
+	if (a->value[i] < 99999990) return;
 	do {
 		a->value[i--] = 0;
 		a->value[i]++;
-	} while (a->value[i] >= 10000 && i > 0);
+	} while (a->value[i] >= 100000000 && i > 0);
 }
-void prt4(unsigned int n,int k) {
+void prt8(unsigned long long n,int k) {
+	n %= 100000000;
+	cout << n / 10000000;
+	if (k == 1) return;
+	n %= 10000000;
+	cout << n / 1000000;
+	if (k == 2) return;
+	n %= 1000000;
+	cout << n / 100000;
+	if (k == 3) return;
+	n %= 100000;
+	cout << n / 10000;
+	if (k == 4) return;
 	n %= 10000;
 	cout << n / 1000;
-	if (k == 1) return;
+	if (k == 5) return;
 	n %= 1000;
 	cout << n / 100;
-	if (k == 2) return;
+	if (k == 6) return;
 	n %= 100;
 	cout << n / 10;
-	if (k == 3) return;
+	if (k == 7) return;
 	cout << n % 10;
 }
