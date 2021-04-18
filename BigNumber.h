@@ -1,17 +1,17 @@
-#define DIGIT 10000 //計算したい桁数
-#define ARRAYSIZE (DIGIT/4+2)
+#define DIGIT 1000000 //計算したい桁数
+#define ARRAYSIZE ((DIGIT+7)/8+2)
 // #define ROUND
 class BigNumber
 {
-	unsigned int value[ARRAYSIZE];
-	static unsigned int tempvalue[ARRAYSIZE * 2];
+	unsigned long long value[ARRAYSIZE];
+	static unsigned long long tempvalue[];
 public:
 	BigNumber(unsigned int n);
 	BigNumber(unsigned int n, unsigned int p);
 	~BigNumber(void);
 	void setvalue(unsigned int n);
 	void setvalue(unsigned int n,unsigned p);
-	unsigned int retvalue(unsigned int p);
+	unsigned long long retvalue(unsigned int p);
 	void as(BigNumber *a);
 	bool equal(BigNumber *a);
 	void add(BigNumber *a, BigNumber *b);
@@ -22,4 +22,4 @@ public:
 	void prt(int dp, int deg);
 	friend void round(BigNumber *a);
 };
-void prt4(unsigned int n, int k);
+void prt8(unsigned long long n, int k);
