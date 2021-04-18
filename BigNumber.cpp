@@ -68,17 +68,18 @@ void BigNumber::sub(BigNumber *a, BigNumber *b) {
 #endif
 }
 void BigNumber::div(BigNumber *a, unsigned int n) {
-	int r;
-	for (int i = 0; i < ARRAYSIZE; i++) value[i] = a->value[i];
-	for (int i = 0; i < ARRAYSIZE; i++) {
-		if (value[i]) {
-			r = value[i] % n;
-			value[i] /= n;
-			if (i < ARRAYSIZE - 1) value[i + 1] += r * 10000;
+	unsigned long long r;
+	int i;
+	for (i = 0; i < ARRAYSIZE; i++) value[i] = a->value[i];
+	r = value[0];
+	for (i = 0; i < ARRAYSIZE - 1; i++) {
+		if (r) {
+			value[i] = r / n;
+			r = (r % n) * 10000 + value[i + 1];
 		}
-		else r = 0;
+		else r = value[i + 1];
 	}
-	if (r * 10000 / n > 4999) value[ARRAYSIZE - 1]++;
+	value[i] = r / n;
 #ifdef ROUND
 	round(this);
 #endif
