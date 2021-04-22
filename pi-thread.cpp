@@ -37,13 +37,13 @@ void func2(BigNumber* PI){
 
 int main()
 {
-    BigNumber PI1(0);
+    static BigNumber PI1(0);
     std::thread th1(func1, &PI1);
-    BigNumber PI2(0);
+    static BigNumber PI2(0);
     std::thread th2(func2, &PI2);
     th1.join();
     th2.join();
-    BigNumber PI(0);
+    static BigNumber PI(0);
     PI.add(&PI1, &PI2);
     PI.prt(1, DIGIT);
 }
