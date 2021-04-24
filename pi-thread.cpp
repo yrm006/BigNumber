@@ -1,6 +1,6 @@
 // 円周率計算
 // 4スレッドで並列計算
-// π/4=44arctan(1/68)+12arctan(1/117)-5arctan(1/239)+20arctan(1/382)+20arctan(1/4557)
+// π/4=20arctan(1/57)+24arctan(1/68)+12arctan(1/117)-5arctan(1/239)
 
 #include "BigNumber.h"
 #include <thread>
@@ -13,9 +13,9 @@ class BigNumber A4(0), B4(0), PI4(0);
 
 void func1() {
     unsigned k, h;
-    h = 68 * 68;
+    h = 57 * 57;
     k = 1;
-    B1.setvalue(4 * 44 * 68);
+    B1.setvalue(4 * 20 * 57);
     do {
         B1.div(&B1, h);
         A1.div(&B1, k);
@@ -27,9 +27,9 @@ void func1() {
 
 void func2() {
     unsigned k, h;
-    h = 117 * 117;
+    h = 68 * 68;
     k = 1;
-    B2.setvalue(4 * 12 * 117);
+    B2.setvalue(4 * 24 * 68);
     do {
         B2.div(&B2, h);
         A2.div(&B2, k);
@@ -41,20 +41,9 @@ void func2() {
 
 void func3() {
     unsigned k, h;
-    h = 382 * 382;
+    h = 117 * 117;
     k = 1;
-    B3.setvalue(4 * 20 * 382);
-    do {
-        B3.div(&B3, h);
-        A3.div(&B3, k);
-        if (k & 2) PI3.sub(&PI3, &A3);
-        else PI3.add(&PI3, &A3);
-        k += 2;
-    } while (!A3.equal(&ZERO));
-
-    h = 4557 * 4557;
-    k = 1;
-    B3.setvalue(4 * 20 * 4557);
+    B3.setvalue(4 * 12 * 117);
     do {
         B3.div(&B3, h);
         A3.div(&B3, k);
