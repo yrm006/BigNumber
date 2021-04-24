@@ -7,7 +7,7 @@
 　e.cpp ネイピア数eを計算  
 　pi.cpp 円周率πを計算  
 　sqrt.cpp 自然数の平方根を計算  
-  pi-thread.cpp　円周率πを4スレッドで並列計算
+　pi-thread.cpp　円周率πを4スレッドで並列計算
   
 BigNumber.hのDIGITを変更することで小数点以下の求める桁数を変更します。  
 出力先は標準出力です。  
